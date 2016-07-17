@@ -26,6 +26,13 @@ Config::Config(int argc, char * const * argv):is_log(false){
 			case 'l':
 				is_log=true;
 		};
+//TEST
+                const char *filename = "/home/box/log.txt";
+                std::ofstream ostr;
+                ostr.open(filename);
+                ostr << ip_addr<< " ; "<< port <<" ; " << directory << std::endl;
+                ostr.close();
+//----
 }
 
 void Config::help(std::ostream & os) const{
