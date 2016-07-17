@@ -150,7 +150,7 @@ void Worker::start(){
 					str_request+=rbuf;
 				//TEST
 					//std::cout << str_request << std::endl;
-		                    const char *filename = "log.txt";
+		                    const char *filename = "/home/box/log.txt";
 		                    std::ofstream ostr;
 		                    ostr.open(filename);
 		                    ostr << str_request << std::endl;
