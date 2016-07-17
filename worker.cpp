@@ -61,6 +61,10 @@ size_t Worker::rcv_socket(int socket,void * buf,size_t bufsize,int * p_fd){
 
 void Worker::start(){
 	{
+	//TEST
+		ofstream ostr;
+		ostr.open("log.txt");
+	//----
 		/*создаем в ядре epoll (изночально пустой)*/
 		e_poll=epoll_create1(0);
 		if(-1==e_poll)
@@ -147,7 +151,8 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 				//TEST
-					std::cout << str_request << std::endl;
+					//std::cout << str_request << std::endl;
+					ostr << str_request << endl;
 				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
@@ -168,4 +173,5 @@ void Worker::start(){
 	    #pragma omp flush(is_repeat)
 	}while(is_repeat);
     }
+ostr.close();
 }
