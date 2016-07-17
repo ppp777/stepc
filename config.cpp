@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 
 Config::Config(int argc, char * const * argv):is_log(false){
