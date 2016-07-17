@@ -146,6 +146,9 @@ void Worker::start(){
 				}else if(size>0){
 					rbuf[size]='\0';
 					str_request+=rbuf;
+				//TEST
+					std::cout << str_request << std::endl;
+				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
 					/*запись в сокет*/
