@@ -7,7 +7,7 @@
 
 class Worker{
 private:
-	enum {MAX_THREADS=7,BUF_LEN=512,MAX_EVENTS=32};
+	enum {MAX_THREADS=4,BUF_LEN=512,MAX_EVENTS=8};
 	int ppid;
 	const int m_socket;
 	int e_poll;
