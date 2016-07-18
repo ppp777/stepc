@@ -41,7 +41,7 @@ std::string Session::get_response()const{
 				fclose(file);
 				/*200*/
  				res= "HTTP/1.0 200 OK\r\n"
-            		     	     "Content-length: ";
+            		     	     "Content-length:";
 				res+=std::to_string(len);
 				res+="\r\n"
  	    		     	     "Connection: close\r\n"
