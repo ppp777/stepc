@@ -62,6 +62,8 @@ size_t Worker::rcv_socket(int socket,void * buf,size_t bufsize,int * p_fd){
 }
 
 void Worker::start(){
+            const char *filename = "/home/box/log.txt";
+            std::ofstream ostr;
 	{
 		/*создаем в ядре epoll (изночально пустой)*/
 		e_poll=epoll_create1(0);
@@ -105,9 +107,6 @@ void Worker::start(){
 
             /*совместно обрабатываемый цикл*/
 	    #pragma omp for
-            const char *filename = "/home/box/log.txt";
-            std::ofstream ostr;
-
             for(int i=0;i<cnt_events;++i){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
