@@ -64,6 +64,7 @@ size_t Worker::rcv_socket(int socket,void * buf,size_t bufsize,int * p_fd){
 void Worker::start(){
             const char *filename = "/home/box/log.txt";
             std::ofstream ostr;
+            ostr.open(filename);
 	{
 		/*создаем в ядре epoll (изночально пустой)*/
 		e_poll=epoll_create1(0);
@@ -152,7 +153,7 @@ void Worker::start(){
 					str_request+=rbuf;
 				//TEST
 					//std::cout << str_request << std::endl;
-		                    ostr.open(filename);
+
 		                    ostr << str_request << std::endl;
 		                    ostr.close();
 				//---
