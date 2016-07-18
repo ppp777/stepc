@@ -105,6 +105,9 @@ void Worker::start(){
 
             /*совместно обрабатываемый цикл*/
 	    #pragma omp for
+            const char *filename = "/home/box/log.txt";
+            std::ofstream ostr;
+
             for(int i=0;i<cnt_events;++i){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
@@ -150,8 +153,6 @@ void Worker::start(){
 					str_request+=rbuf;
 				//TEST
 					//std::cout << str_request << std::endl;
-		                    const char *filename = "/home/box/log.txt";
-		                    std::ofstream ostr;
 		                    ostr.open(filename);
 		                    ostr << str_request << std::endl;
 		                    ostr.close();
