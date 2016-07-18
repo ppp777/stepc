@@ -109,7 +109,7 @@ void Master::start(){
 	}
 	
 	/*начинаем слушать порт на указанном в конфигурации адресе*/
-	res=listen(m_socket,SOMAXCONN);
+	res=listen(m_socket, 8); //SOMAXCONN
 	if(-1==res){
 		std::string str_err="Не удалось выполнить listen: ";
 		str_err+=cfg.get_addr();
