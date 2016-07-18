@@ -152,12 +152,14 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 				//TEST
-					//std::cout << str_request << std::endl;
-
 		                    ostr << str_request << std::endl;
 				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
+					str_request+=rbuf;
+				//TEST
+		                    ostr << str_respons << std::endl;
+				//---
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
 						int len = i+BUF_LEN<l ? BUF_LEN : l-i;
