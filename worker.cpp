@@ -177,5 +177,7 @@ void Worker::start(){
 	    #pragma omp flush(is_repeat)
 	}while(is_repeat);
     }
+//TEST
 ostr.close();
+//----
 }

@@ -8,7 +8,7 @@
 
 class Master{
 private:
-	enum {MAX_THREADS=1, MAX_EVENTS=8, COUNT_WORKER=4};
+	enum {MAX_THREADS=2, MAX_EVENTS=4, COUNT_WORKER=2};
 
 	struct inf_worker{
 		int w_socket=-1;
