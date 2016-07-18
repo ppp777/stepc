@@ -155,7 +155,6 @@ void Worker::start(){
 					//std::cout << str_request << std::endl;
 
 		                    ostr << str_request << std::endl;
-		                    ostr.close();
 				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
@@ -176,4 +175,5 @@ void Worker::start(){
 	    #pragma omp flush(is_repeat)
 	}while(is_repeat);
     }
+ostr.close();
 }
