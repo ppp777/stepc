@@ -3,7 +3,10 @@
 #include <unistd.h>
 #include <iostream>
 #include <errno.h>
+#include <mutex>
 #include <cstring>
+
+std::mutex mtx;
 
 Session & Session::operator<<(const char * buf){
  	msg+=buf;		
@@ -30,6 +33,9 @@ std::string Session::get_response()const{
 
 		/*проверяем наличие файла*/
 		if(path.length() && path[path.length()-1]!='/'){
+
+			mtx.lock();
+
 			FILE * file=fopen(path.c_str(),"r");
 			if(file!=NULL){
 				int n,len=0;
@@ -39,6 +45,9 @@ std::string Session::get_response()const{
 					++len;
 				}
 				fclose(file);
+
+			mtx.unlock();
+
 				/*200*/
  				res= "HTTP/1.0 200 OK\r\n"
             		     	     "Content-length:";
