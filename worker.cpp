@@ -156,10 +156,10 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 					Session ss(str_request);
-
-					#pragma omp atomic
-
-					str_respons=ss.get_response();
+					#pragma omp critical
+					{
+						str_respons=ss.get_response();
+					}
 					str_request+=rbuf;
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
