@@ -108,7 +108,7 @@ void Worker::start(){
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
 
-				p_mst->shutdown_close(s_socket);
+				p_mst->shutdown_close(m_enents[i].data.fd);
 
 				is_repeat=false;
 			}else{
