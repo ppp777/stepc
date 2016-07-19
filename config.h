@@ -11,7 +11,7 @@ private:
 	bool is_log;
 public:	
 	 /*конструктор экземпляра*/
-	 Config():ip_addr("0.0.0.0"),port(80),directory("www"),is_log(false){}
+	 Config():ip_addr("0.0.0.0"),port(12345),directory("/tmp"),is_log(false){}
 	 Config(int argc,char * const * argv);
 	 /*методы*/
 	 int get_port() const {return port;}
