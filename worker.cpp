@@ -83,8 +83,6 @@ void Worker::start(){
 		event.events =EPOLLIN; //есть не прочитанные данные
 		res=epoll_ctl(e_poll,EPOLL_CTL_ADD,m_socket,&event);
 		if(-1==res){                                          //Close m_socket???
-		    	shutdown(event.data.fd,SHUT_RDWR);
-			close(event.data.fd);
 		        throw std::runtime_error("Не удается добавить мастер сокет worker в epoll.");
 		}
 	}
@@ -118,6 +116,11 @@ void Worker::start(){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
+
+		    	epoll_ctl(e_poll,EPOLL_CTL_DEL,m_enents[i].data.fd,nullptr); /*удаляем регистрацию*/
+		    	shutdown(m_enents[i].data.fd,SHUT_RDWR);
+			close(m_enents[i].data.fd);
+	
 				is_repeat=false; //m_socket close ???
 			}else{
 				/*пытаемся принять новый сокет*/
