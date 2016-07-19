@@ -83,7 +83,8 @@ void Worker::start(){
 		event.events =EPOLLIN; //есть не прочитанные данные
 		res=epoll_ctl(e_poll,EPOLL_CTL_ADD,m_socket,&event);
 		if(-1==res){                                          //Close m_socket???
-			shutdown_close(m_socket);
+		    	shutdown(event.data.fd,SHUT_RDWR);
+			close(event.data.fd);
 		        throw std::runtime_error("Не удается добавить мастер сокет worker в epoll.");
 		}
 	}
