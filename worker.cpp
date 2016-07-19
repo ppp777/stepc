@@ -116,11 +116,6 @@ void Worker::start(){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
-
-		    	epoll_ctl(e_poll,EPOLL_CTL_DEL,m_enents[i].data.fd,nullptr); /*удаляем регистрацию*/
-		    	shutdown(m_enents[i].data.fd,SHUT_RDWR);
-			close(m_enents[i].data.fd);
-	
 				is_repeat=false; //m_socket close ???
 			}else{
 				/*пытаемся принять новый сокет*/
@@ -160,15 +155,9 @@ void Worker::start(){
 				}else if(size>0){
 					rbuf[size]='\0';
 					str_request+=rbuf;
-				//TEST
-		                //    ostr << str_request << std::endl;
-				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
 					str_request+=rbuf;
-				//TEST
-		                //    ostr << str_respons << std::endl;
-				//---
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
 						int len = i+BUF_LEN<l ? BUF_LEN : l-i;
@@ -186,7 +175,4 @@ void Worker::start(){
 	    #pragma omp flush(is_repeat)
 	}while(is_repeat);
     }
-//TEST
-//ostr.close();
-//----
 }
