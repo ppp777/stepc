@@ -181,7 +181,16 @@ void Master::begin_loop(){
 					int s_socket=accept(m_socket,(sockaddr*)&saddr,&saddr_len);
 					if(-1!=s_socket){
 						/*отправляем сокет одному из worker*/
-						send_socket(p_m_workers->get_w_socket(),(void*)&s_socket,sizeof(s_socket),s_socket);
+						int res = send_socket(p_m_workers->get_w_socket(),(void*)&s_socket,sizeof(s_socket),s_socket);
+			//TEST
+						if (res == -1){
+						int fd=m_enents[i].data.fd;
+							/*удаляем из epoll*/
+							epoll_ctl(e_poll,EPOLL_CTL_DEL,fd,nullptr);
+							/*закрываем мастер сокет worker*/
+							shutdown_close(fd);
+						}
+			//----
 					}
 				}else{/*сломался worker*/
 					if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
