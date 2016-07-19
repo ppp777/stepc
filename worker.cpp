@@ -62,9 +62,12 @@ size_t Worker::rcv_socket(int socket,void * buf,size_t bufsize,int * p_fd){
 }
 
 void Worker::start(){
-            const char *filename = "/home/box/log.txt";
+//TEST
+/*            const char *filename = "/home/box/log.txt";
             std::ofstream ostr;
             ostr.open(filename);
+*/
+//----
 	{
 		/*создаем в ядре epoll (изночально пустой)*/
 		e_poll=epoll_create1(0);
@@ -152,13 +155,13 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 				//TEST
-		                    ostr << str_request << std::endl;
+		                //    ostr << str_request << std::endl;
 				//---
 					Session ss(str_request);
 					str_respons=ss.get_response();
 					str_request+=rbuf;
 				//TEST
-		                    ostr << str_respons << std::endl;
+		                //    ostr << str_respons << std::endl;
 				//---
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
@@ -178,6 +181,6 @@ void Worker::start(){
 	}while(is_repeat);
     }
 //TEST
-ostr.close();
+//ostr.close();
 //----
 }
