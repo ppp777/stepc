@@ -109,7 +109,7 @@ void Master::start(){
 	}
 	
 	/*начинаем слушать порт на указанном в конфигурации адресе*/
-	res=listen(m_socket, 8); //SOMAXCONN
+	res=listen(m_socket,SOMAXCONN);
 	if(-1==res){
 		std::string str_err="Не удалось выполнить listen: ";
 		str_err+=cfg.get_addr();
@@ -181,7 +181,7 @@ void Master::begin_loop(){
 					int s_socket=accept(m_socket,(sockaddr*)&saddr,&saddr_len);
 					if(-1!=s_socket){
 						/*отправляем сокет одному из worker*/
-						int res = send_socket(p_m_workers->get_w_socket(),(void*)&s_socket,sizeof(s_socket),s_socket);
+						send_socket(p_m_workers->get_w_socket(),(void*)&s_socket,sizeof(s_socket),s_socket);
 					}
 				}else{/*сломался worker*/
 					if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){

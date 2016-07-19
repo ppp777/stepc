@@ -9,8 +9,6 @@
 #include <iostream>
 #include <omp.h>
 #include "session.h"
-#include <fstream>
-
 
 extern Master * p_mst;
 
@@ -62,12 +60,6 @@ size_t Worker::rcv_socket(int socket,void * buf,size_t bufsize,int * p_fd){
 }
 
 void Worker::start(){
-//TEST
-/*            const char *filename = "/home/box/log.txt";
-            std::ofstream ostr;
-            ostr.open(filename);
-*/
-//----
 	{
 		/*создаем в ядре epoll (изночально пустой)*/
 		e_poll=epoll_create1(0);
@@ -82,9 +74,8 @@ void Worker::start(){
 		event.data.fd=m_socket;
 		event.events =EPOLLIN; //есть не прочитанные данные
 		res=epoll_ctl(e_poll,EPOLL_CTL_ADD,m_socket,&event);
-		if(-1==res){                                          //Close m_socket???
-		        throw std::runtime_error("Не удается добавить мастер сокет worker в epoll.");
-		}
+		if(-1==res)
+	        throw std::runtime_error("Не удается добавить мастер сокет worker в epoll.");
 	}
 
     /*массив, для хранения событий*/
@@ -116,7 +107,7 @@ void Worker::start(){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
-				is_repeat=false; //m_socket close ???
+				is_repeat=false;
 			}else{
 				/*пытаемся принять новый сокет*/
 				int s_socket=-1;
@@ -156,11 +147,7 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 					Session ss(str_request);
-					#pragma omp critical
-					{
-						str_respons=ss.get_response();
-					}
-					str_request+=rbuf;
+					str_respons=ss.get_response();
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
 						int len = i+BUF_LEN<l ? BUF_LEN : l-i;

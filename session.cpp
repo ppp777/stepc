@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <iostream>
 #include <errno.h>
-#include <mutex>
 #include <cstring>
 
 Session & Session::operator<<(const char * buf){
@@ -31,7 +30,6 @@ std::string Session::get_response()const{
 
 		/*проверяем наличие файла*/
 		if(path.length() && path[path.length()-1]!='/'){
-
 			FILE * file=fopen(path.c_str(),"r");
 			if(file!=NULL){
 				int n,len=0;
@@ -43,7 +41,7 @@ std::string Session::get_response()const{
 				fclose(file);
 				/*200*/
  				res= "HTTP/1.0 200 OK\r\n"
-            		     	     "Content-length:";
+            		     	     "Content-length: ";
 				res+=std::to_string(len);
 				res+="\r\n"
  	    		     	     "Connection: close\r\n"
