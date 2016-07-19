@@ -108,7 +108,10 @@ void Worker::start(){
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
 
-				p_mst->shutdown_close(m_enents[i].data.fd);
+				struct linger l = { 1, 0 };
+				setsockopt(m_enents[i].data.fd, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
+			    	shutdown(m_enents[i].data.fd,SHUT_RDWR);
+				close(m_enents[i].data.fd);
 
 				is_repeat=false;
 			}else{
