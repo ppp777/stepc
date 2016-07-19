@@ -94,7 +94,10 @@ void Master::start(){
 
 	/*делаем мастер сокет*/
 	m_socket=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-	
+//TEST
+	struct linger l = { 1, 0 };
+	setsockopt(m_socket, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
+//----
 	/*биндим*/
 	sockaddr_in saddr;
 	saddr.sin_family=AF_INET;
