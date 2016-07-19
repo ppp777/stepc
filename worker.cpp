@@ -155,10 +155,10 @@ void Worker::start(){
 				}else if(size>0){
 					rbuf[size]='\0';
 					str_request+=rbuf;
+					Session ss(str_request);
 
 					#pragma omp atomic
 
-					Session ss(str_request);
 					str_respons=ss.get_response();
 					str_request+=rbuf;
 					/*запись в сокет*/
