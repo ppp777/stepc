@@ -115,10 +115,6 @@ void Worker::start(){
 				rcv_socket(m_socket,buf,BUF_LEN,&s_socket);
 				if(-1!=s_socket){
 					/*перевод сокета в неблокирующий режим*/
-				//TEST
-					struct linger l = { 1, 0 };
-					setsockopt(s_socket, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
-				//----
 					int res=p_mst->set_non_block(s_socket);
 					if(-1==res) /*не удалось*/
 						p_mst->shutdown_close(s_socket);
