@@ -107,12 +107,6 @@ void Worker::start(){
 		if(m_enents[i].data.fd==m_socket){                                  /*событие на мастер сокете*/
 			if(m_enents[i].events & EPOLLERR || m_enents[i].events & EPOLLHUP){
 				/*утрачена связь с мастер процессом*/
-
-				struct linger l = { 1, 0 };
-				setsockopt(m_enents[i].data.fd, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
-			    	shutdown(m_enents[i].data.fd,SHUT_RDWR);
-				close(m_enents[i].data.fd);
-
 				is_repeat=false;
 			}else{
 				/*пытаемся принять новый сокет*/
@@ -148,15 +142,12 @@ void Worker::start(){
 				int size=recv(fd,rbuf,BUF_LEN-1,MSG_NOSIGNAL);
 				if(0==size && errno != EAGAIN){
 					/*закрываем соединение*/
-
-					struct linger l = { 1, 0 };
-					setsockopt(fd, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
-
 					p_mst->shutdown_close(fd);
 				}else if(size>0){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 					Session ss(str_request);
+  			            #pragma omp barrier
 					str_respons=ss.get_response();
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
@@ -165,10 +156,6 @@ void Worker::start(){
 					}
 					/*закрываем соединение*/
 					int res=epoll_ctl(e_poll,EPOLL_CTL_DEL,m_enents[i].data.fd,nullptr); /*удаляем регистрацию*/
-
-					struct linger l = { 1, 0 };
-					setsockopt(m_enents[i].data.fd, SOL_SOCKET, SO_LINGER, &l, sizeof(struct linger));
-
 					res=shutdown(m_enents[i].data.fd,SHUT_RDWR);
 					res=close(m_enents[i].data.fd);
 				}
