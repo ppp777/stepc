@@ -83,6 +83,9 @@ void Worker::start(){
     int cnt_events;
     bool is_repeat=true;
 
+    omp_lock_t writelock;
+    omp_init_lock(&writelock);
+
     /*параллельная секция*/
     #pragma omp parallel num_threads(MAX_THREADS)
     {
@@ -147,8 +150,14 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 					Session ss(str_request);
+
+
+					omp_set_lock(&writelock);
+
 					str_respons=ss.get_response();
-				        #pragma omp barrier
+
+					omp_unset_lock(&writelock);
+
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
 						int len = i+BUF_LEN<l ? BUF_LEN : l-i;
@@ -166,4 +175,5 @@ void Worker::start(){
 	    #pragma omp flush(is_repeat)
 	}while(is_repeat);
     }
+omp_destroy_lock(&writelock);
 }
