@@ -147,8 +147,8 @@ void Worker::start(){
 					rbuf[size]='\0';
 					str_request+=rbuf;
 					Session ss(str_request);
-  			            #pragma omp barrier
 					str_respons=ss.get_response();
+				        #pragma omp barrier
 					/*запись в сокет*/
 					for(int i=0,l=str_respons.length();i<l;i += BUF_LEN){
 						int len = i+BUF_LEN<l ? BUF_LEN : l-i;
