@@ -37,8 +37,13 @@ std::string Session::get_response()const{
 				while ((n = std::fgetc(file)) != EOF) { // standard C I/O file reading loop
 					res_+=(char)n;
 					++len;
+				} 
+				int cl = 1;
+
+				while (cl != 0){
+					cl = fclose(file);
 				}
-				fclose(file);
+
 				/*200*/
  				res= "HTTP/1.0 200 OK\r\n"
             		     	     "Content-length: ";
